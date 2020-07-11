@@ -6,7 +6,9 @@ import me.amitnave.voting.WAInterface.Command.Parsers.AddVoteParser.AddVoteParse
 import me.amitnave.voting.WAInterface.Command.Parsers.AppealParser.AddAppealParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.AppealParser.AnswerAppealParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.HelpParser;
+import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.CancelLawParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.GetLawStatusParser;
+import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.GetPassedLawsParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.PassLawParser;
 import me.amitnave.voting.WAInterface.Command.VotingCommand;
 import me.amitnave.voting.WAInterface.Message.Message;
@@ -28,7 +30,9 @@ public class WhatsappVotingSystem {
             new AnswerAppealParser(),
             new GetLawStatusParser(),
             new PassLawParser(),
-            new HelpParser()
+            new HelpParser(),
+            new CancelLawParser(),
+            new GetPassedLawsParser()
     );
     public VotingCommand parseMessage(Message message) throws SQLException, ParseException {
         for (CommandParser parser: parsers
@@ -75,11 +79,14 @@ public class WhatsappVotingSystem {
                 ms.addToLastRow(againstLaw + "");
                 ms.addRow("נמנע - ");
                 ms.addToLastRow(neutral + "");
+                ms.addRow(law.getDescription());
                 MessageToSend m = new MessageToSend(ms.getString(), Settings.getCouncilChatID());
                 list.add(m);
             }
         }
         return list;
     }
+
+
 
 }

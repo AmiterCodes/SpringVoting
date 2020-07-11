@@ -21,6 +21,8 @@ public class Law {
     public static final int passed = 0;
     public static final int failed = 1;
     public static final int inProcess = 2;
+    public static final int invalidated = 3;
+    public static final int canceled = 4;
     public static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     public Law(String description, int creator, int status, String date, boolean anonymousVoting,
@@ -123,17 +125,19 @@ public class Law {
         }
         st.close();
     }
+
     public String minutesLeft() throws ParseException {
         java.util.Date date = dateFormat.parse(this.date);
         java.util.Date now = dateFormat.parse(now());
-        Long timeLeft=TIME_TO_PASS-(now.getTime()-date.getTime());
-        return ((timeLeft/(60*1000))%60)+"";
+        Long timeLeft = TIME_TO_PASS - (now.getTime() - date.getTime());
+        return ((timeLeft / (60 * 1000)) % 60) + "";
     }
+
     public String hoursLeft() throws ParseException {
         java.util.Date date = dateFormat.parse(this.date);
         java.util.Date now = dateFormat.parse(now());
-        Long timeLeft=TIME_TO_PASS-(now.getTime()-date.getTime());
-        return (timeLeft/(60*60*1000))+"";
+        Long timeLeft = TIME_TO_PASS - (now.getTime() - date.getTime());
+        return (timeLeft / (60 * 60 * 1000)) + "";
     }
 
     private static boolean oneDayPassed(String time) throws ParseException {
@@ -144,7 +148,7 @@ public class Law {
     }
 
     public boolean updateStatus() throws SQLException, ParseException {
-        if (!oneDayPassed(date) || status == failed || status == passed) {
+        if (!oneDayPassed(date) || status != inProcess) {
             return false;
         }
 
@@ -166,34 +170,40 @@ public class Law {
         }
         if (forCounter > againstCounter) {
             status = passed;
-            DBHelper.update("update voting.law set status="+passed+" where id="+id+";");
-        }
-        else{
+            DBHelper.update("update voting.law set status=" + passed + " where id=" + id + ";");
+        } else {
             status = failed;
-            DBHelper.update("update voting.law set status="+failed+" where id="+id+";");
+            DBHelper.update("update voting.law set status=" + failed + " where id=" + id + ";");
 
         }
         st.close();
         return true;
     }
+
     public void cancel() throws SQLException {
-        status = failed;
-        DBHelper.update("update voting.law set status="+failed+" where id="+id+";");
+        status = canceled;
+        DBHelper.update("update voting.law set status=" + canceled + " where id=" + id + ";");
     }
+    public void invalidate() throws SQLException {
+        status = invalidated;
+        DBHelper.update("update voting.law set status=" + invalidated + " where id=" + id + ";");
+    }
+
     public List<Vote> getVotes() throws SQLException {
-        List<Vote> votes=new ArrayList<>();
+        List<Vote> votes = new ArrayList<>();
         String sql = "SELECT * FROM voting.vote where law=" + id + ";";
         Statement st;
         Connection conn = DBHelper.getConnection();
         st = conn.createStatement();
         ResultSet rs = st.executeQuery(sql);
         while (rs.next()) {
-            votes.add(new Vote(rs.getInt("law"),rs.getInt("member"), rs.getInt("vote")));
+            votes.add(new Vote(rs.getInt("law"), rs.getInt("member"), rs.getInt("vote")));
         }
         return votes;
     }
+
     public static List<Law> getLawsByStatus(int status) throws SQLException, ParseException {
-        List<Law> laws=new ArrayList<>();
+        List<Law> laws = new ArrayList<>();
         String sql = "SELECT * FROM voting.law where status=" + status + ";";
         Statement st;
         Connection conn = DBHelper.getConnection();

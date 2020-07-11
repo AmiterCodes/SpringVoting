@@ -28,8 +28,13 @@ public class GetLawStatus implements VotingCommand {
             status = "עבר";
         } else if (law.getStatus() == Law.failed) {
             status = "לא עבר";
-        } else {
+        } else if (law.getStatus()==Law.inProcess) {
             status = "בתהליך הצבעה";
+        } else if (law.getStatus()==Law.invalidated){
+            status="נפסל על ידי הנשיא";
+        }
+        else {
+            status="בוטל על ידי ההוגה";
         }
         MessageStructure structure=new MessageStructure();
         structure.addToLastRow("מצב החוק:");
@@ -69,15 +74,12 @@ public class GetLawStatus implements VotingCommand {
             ) {
                 if (vote.getVote() == Vote.NEUTRAL) {
                     structure.addRow((new Member(vote.getMemberID()).getName()));
-
                 }
             }
         }
-
-
+        structure.addRow(law.getDescription());
         String res = structure.getString();
         return new MessageToSend(res, askerNum);
-
     }
 
     public GetLawStatus(Law law, String askerNum) {
