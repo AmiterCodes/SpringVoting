@@ -1,5 +1,6 @@
 package me.amitnave.voting.WAInterface.Command.Parsers.LawParser;
 
+import com.mysql.cj.util.StringUtils;
 import me.amitnave.voting.WAInterface.Command.CommandParser;
 import me.amitnave.voting.WAInterface.Command.VotingCommand;
 import me.amitnave.voting.WAInterface.Command.VotingCommands.Law.PassLaw;
