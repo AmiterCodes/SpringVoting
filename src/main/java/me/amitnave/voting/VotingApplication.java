@@ -10,7 +10,6 @@ import java.sql.SQLException;
 public class VotingApplication {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        DBHelper.main();
         SpringApplication.run(VotingApplication.class, args);
 
     }

@@ -18,12 +18,6 @@ public class DBHelper {
 
         ///Class.forName("com.mysql.cj.jdbc.Driver");
 
-        final String localhost = DBHelper.localhost;
-        final String root = DBHelper.root;
-        String password = DBHelper.password;
-        String sql = "update voting.member set id=1 where id=4;";
-        update(sql);
-        return;
     }
 
     public static void update(String sql) throws SQLException {

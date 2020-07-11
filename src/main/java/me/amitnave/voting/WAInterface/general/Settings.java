@@ -1,9 +1,9 @@
 package me.amitnave.voting.WAInterface.general;
 
 public class Settings {
-    private static String councilChatID = "972586649222-1594471911@g.us";
+    private static String councilChatID = "972546461280-1571250832@g.us";
     private static String presidentChatID = "972584404076@c.us";
-    public static final int TIME_TO_PASS = 180000;
+    public static final int TIME_TO_PASS = 86400000;
     public static String getCouncilChatID() {
         return councilChatID;
     }
