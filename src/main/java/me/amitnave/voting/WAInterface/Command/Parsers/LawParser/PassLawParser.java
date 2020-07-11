@@ -27,6 +27,7 @@ public class PassLawParser implements CommandParser {
         }
         memberID=new Member(message.getChatID()).getId();
         String[] rows = message.getContent().split("\n");
+        if(rows.length < 2) return false;
         if (rows[1].equals(ANNONYMOUS_VOTE)) {
             anonymousVoting = true;
             if (rows[2].equals(ANNONYMOUS_SOURCE)) {
