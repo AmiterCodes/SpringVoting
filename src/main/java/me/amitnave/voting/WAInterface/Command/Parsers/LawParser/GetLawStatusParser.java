@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 
 public class GetLawStatusParser implements CommandParser {
-    private int lawID;
+    private Law law;
     private String askerNum;
     @Override
     public boolean isLegalCommand(Message message) throws SQLException {
@@ -19,8 +19,9 @@ public class GetLawStatusParser implements CommandParser {
         String s=message.getContent();
         if (!s.startsWith("מצב חוק #")) return false;
         try {
-            lawID=Integer.parseInt(s.substring(s.indexOf('#')+1));
-            return true;
+            int lawID=Integer.parseInt(s.substring(s.indexOf('#')+1));
+            law=new Law(lawID);
+            return law.getDescription()!=null;
         }
         catch (Exception e){
             return false;
@@ -29,7 +30,7 @@ public class GetLawStatusParser implements CommandParser {
 
     @Override
     public VotingCommand getCommand() throws SQLException, ParseException {
-        return new  GetLawStatus(new Law(lawID), askerNum);
+        return new  GetLawStatus(law, askerNum);
     }
 
 

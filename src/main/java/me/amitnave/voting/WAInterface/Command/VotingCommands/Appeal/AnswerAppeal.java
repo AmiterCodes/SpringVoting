@@ -35,7 +35,7 @@ public class AnswerAppeal implements VotingCommand {
         if (new Law(appeal.getLaw()).isAnonymousCreator())
             structure.addToLastRow(("אנונימי"));
         else
-            structure.addToLastRow((new Member(appeal.getAppealer())).getName());
+            structure.addToLastRow(new Member(law.getCreator()).getName());
 
         structure.addRow("תיאור:");
         structure.addToLastRow(law.getDescription());

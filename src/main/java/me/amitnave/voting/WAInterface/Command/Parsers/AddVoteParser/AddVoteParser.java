@@ -32,7 +32,7 @@ public class AddVoteParser implements CommandParser {
             lawID=Integer.parseInt(header.substring(header.indexOf('#')+1));
 
             if (new Law(lawID).getDescription()==null) return false;
-            return true;
+            return !new Law(lawID).isAnonymousVoting();
         }
         catch (Exception e){
             return false;

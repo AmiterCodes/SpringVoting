@@ -56,7 +56,7 @@ public class Appeal {
         DBHelper.update(sql);
         if (approved){
             status= Appeal.approved;
-            (new Law(law)).cancel();
+            (new Law(law)).invalidate();
         }
         else status=rejected;
         comment=explanation;
