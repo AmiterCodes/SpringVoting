@@ -10,6 +10,7 @@ import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.CancelLawParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.GetLawStatusParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.GetPassedLawsParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.PassLawParser;
+import me.amitnave.voting.WAInterface.Command.Parsers.MemberParser.MemberStatsParser;
 import me.amitnave.voting.WAInterface.Command.VotingCommand;
 import me.amitnave.voting.WAInterface.Message.Message;
 import me.amitnave.voting.WAInterface.Message.MessageStructure;
@@ -32,7 +33,8 @@ public class WhatsappVotingSystem {
             new PassLawParser(),
             new HelpParser(),
             new CancelLawParser(),
-            new GetPassedLawsParser()
+            new GetPassedLawsParser(),
+            new MemberStatsParser()
     );
     public VotingCommand parseMessage(Message message) throws SQLException, ParseException {
         for (CommandParser parser: parsers

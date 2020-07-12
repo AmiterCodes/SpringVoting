@@ -65,29 +65,29 @@ public class GetLawStatus implements VotingCommand {
         structure.addToLastRow(status);
 
         if (law.getStatus() == Law.inProcess) {
-            structure.addRow("זמן שנותר:");
+            structure.addRow("זמן שנותר: ");
             structure.addToLastRow(law.hoursLeft());
-            structure.addToLastRow("שעות");
+            structure.addToLastRow(" שעות ");
             structure.addToLastRow(law.minutesLeft());
-            structure.addToLastRow("דקות.");
+            structure.addToLastRow(" דקות.");
         }
         if (!law.isAnonymousVoting()) {
             structure.addRow("בעד");
             for (String member : forVotes
             ) {
-                structure.addRow("      ");
+                structure.addRow("      -");
                 structure.addToLastRow(member);
             }
             structure.addRow("נגד");
             for (String member : againstVotes
             ) {
-                structure.addRow("      ");
+                structure.addRow("      -");
                 structure.addToLastRow(member);
             }
             structure.addRow("נמנע");
             for (String member : neutralVotes
             ) {
-                structure.addRow("      ");
+                structure.addRow("      -");
                 structure.addToLastRow(member);
 
             }

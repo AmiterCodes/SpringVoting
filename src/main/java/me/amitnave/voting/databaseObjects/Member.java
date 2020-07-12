@@ -99,6 +99,24 @@ public class Member {
         }
         st.close();
     }
+    public Member(String name, boolean b) throws SQLException {
+        // create our mysql database connection
+        Connection conn = DBHelper.getConnection();
+        // our SQL SELECT query.
+        // if you only need a few columns, specify them by name instead of using "*"
+        String query = "SELECT * FROM voting.member where name='" + name+"';";
+        // create the java statement
+        Statement st = conn.createStatement();
+        // execute the query, and get a java result set
+        ResultSet rs = st.executeQuery(query);
+        // iterate through the java result set
+        while (rs.next()) {
+            this.id=rs.getInt("id");
+            phone = rs.getString("phone");
+            name = rs.getString("name");
+        }
+        st.close();
+    }
 
 
 }

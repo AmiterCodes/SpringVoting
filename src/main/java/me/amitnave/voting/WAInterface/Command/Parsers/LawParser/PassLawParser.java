@@ -5,6 +5,7 @@ import me.amitnave.voting.WAInterface.Command.CommandParser;
 import me.amitnave.voting.WAInterface.Command.VotingCommand;
 import me.amitnave.voting.WAInterface.Command.VotingCommands.Law.PassLaw;
 import me.amitnave.voting.WAInterface.Message.Message;
+import me.amitnave.voting.WAInterface.general.Settings;
 import me.amitnave.voting.databaseObjects.Law;
 import me.amitnave.voting.databaseObjects.Member;
 
@@ -22,13 +23,14 @@ public class PassLawParser implements CommandParser {
 
     @Override
     public boolean isLegalCommand(Message message) throws SQLException {
-        if (!message.getContent().startsWith(LAW_SUGGESTION) || !Member.isMember(message.getChatID()) ||
+        if (!message.getContent().startsWith(LAW_SUGGESTION) ||
+                (!Member.isMember(message.getChatID()) && !message.getChatID().equals(Settings.getPresidentChatID())) ||
                 !message.isPrivate()) {
             return false;
         }
-        memberID=new Member(message.getChatID()).getId();
+        memberID = new Member(message.getChatID()).getId();
         String[] rows = message.getContent().split("\n");
-        if(rows.length < 2) return false;
+        if (rows.length < 2) return false;
         if (rows[1].equals(ANNONYMOUS_VOTE)) {
             anonymousVoting = true;
             if (rows[2].equals(ANNONYMOUS_SOURCE)) {
@@ -36,50 +38,47 @@ public class PassLawParser implements CommandParser {
                 String s = "";
                 for (int i = 3; i < rows.length; i++) {
                     s += rows[i];
-                    s+=" ";
+                    s += " ";
                 }
-                content=s;
+                content = s;
             } else {
                 anonymousCretor = false;
                 String s = "";
                 for (int i = 2; i < rows.length; i++) {
                     s += rows[i];
-                    s+=" ";
+                    s += " ";
                 }
-                content=s;
+                content = s;
             }
-        }
-        else {
-            if (rows[1].equals(ANNONYMOUS_SOURCE)){
-                anonymousCretor=true;
-                if (rows[2].equals(ANNONYMOUS_VOTE)){
-                    anonymousVoting=true;
+        } else {
+            if (rows[1].equals(ANNONYMOUS_SOURCE)) {
+                anonymousCretor = true;
+                if (rows[2].equals(ANNONYMOUS_VOTE)) {
+                    anonymousVoting = true;
                     String s = "";
                     for (int i = 3; i < rows.length; i++) {
                         s += rows[i];
-                        s+=" ";
+                        s += " ";
                     }
-                    content=s;
-                }
-                else {
-                    anonymousVoting=false;
+                    content = s;
+                } else {
+                    anonymousVoting = false;
                     String s = "";
                     for (int i = 2; i < rows.length; i++) {
                         s += rows[i];
-                        s+=" ";
+                        s += " ";
                     }
-                    content=s;
+                    content = s;
                 }
-            }
-            else {
-                anonymousCretor=false;
-                anonymousVoting=false;
+            } else {
+                anonymousCretor = false;
+                anonymousVoting = false;
                 String s = "";
                 for (int i = 1; i < rows.length; i++) {
                     s += rows[i];
-                    s+=" ";
+                    s += " ";
                 }
-                content=s;
+                content = s;
             }
         }
         return true;
@@ -87,6 +86,6 @@ public class PassLawParser implements CommandParser {
 
     @Override
     public VotingCommand getCommand() {
-        return new PassLaw(new Law(content,memberID, Law.inProcess, Law.now(),anonymousVoting,anonymousCretor));
+        return new PassLaw(new Law(content, memberID, Law.inProcess, Law.now(), anonymousVoting, anonymousCretor));
     }
 }
