@@ -21,7 +21,7 @@ public class Law {
     public static final int passed = 0;
     public static final int failed = 1;
     public static final int inProcess = 2;
-    public static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    public static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public Law(String description, int creator, int status, String date, boolean anonymousVoting,
                boolean anonymousCreator) {
