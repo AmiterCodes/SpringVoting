@@ -113,7 +113,7 @@ public class Member {
         while (rs.next()) {
             this.id=rs.getInt("id");
             phone = rs.getString("phone");
-            name = rs.getString("name");
+            this.name = rs.getString("name");
         }
         st.close();
     }
