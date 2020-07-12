@@ -3,12 +3,17 @@ package me.amitnave.voting.WAInterface.Command.VotingCommands.Law;
 import me.amitnave.voting.WAInterface.Command.VotingCommand;
 import me.amitnave.voting.WAInterface.Message.MessageStructure;
 import me.amitnave.voting.WAInterface.Message.MessageToSend;
+import me.amitnave.voting.databaseObjects.DBHelper;
 import me.amitnave.voting.databaseObjects.Law;
 import me.amitnave.voting.databaseObjects.Member;
 import me.amitnave.voting.databaseObjects.Vote;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetLawStatus implements VotingCommand {
@@ -22,21 +27,40 @@ public class GetLawStatus implements VotingCommand {
 
     @Override
     public MessageToSend message() throws SQLException, ParseException {
-        List<Vote> votes = law.getVotes();
+        Connection conn = DBHelper.getConnection();
+        // our SQL SELECT query.
+        // if you only need a few columns, specify them by name instead of using "*"
+        String query = "SELECT voting.vote.vote, voting.member.name FROM voting.vote INNER JOIN voting.member ON voting.vote.law = " + law.getId() + " AND voting.member.id=voting.vote.member;";
+        // create the java statement
+        Statement st = conn.createStatement();
+        // execute the query, and get a java resultset
+        ResultSet rs = st.executeQuery(query);
+        // iterate through the java resultset
+        List<String> forVotes = new ArrayList<>();
+        List<String> againstVotes = new ArrayList<>();
+        List<String> neutralVotes = new ArrayList<>();
+        while (rs.next()) {
+            if (rs.getInt("vote") == Vote.FOR)
+                forVotes.add(rs.getString("name"));
+            if (rs.getInt("vote") == Vote.AGAINST)
+                againstVotes.add(rs.getString("name"));
+            if (rs.getInt("vote") == Vote.NEUTRAL)
+                neutralVotes.add(rs.getString("name"));
+        }
+        st.close();
         String status;
         if (law.getStatus() == Law.passed) {
             status = "עבר";
         } else if (law.getStatus() == Law.failed) {
             status = "לא עבר";
-        } else if (law.getStatus()==Law.inProcess) {
+        } else if (law.getStatus() == Law.inProcess) {
             status = "בתהליך הצבעה";
-        } else if (law.getStatus()==Law.invalidated){
-            status="נפסל על ידי הנשיא";
+        } else if (law.getStatus() == Law.invalidated) {
+            status = "נפסל על ידי הנשיא";
+        } else {
+            status = "בוטל על ידי ההוגה";
         }
-        else {
-            status="בוטל על ידי ההוגה";
-        }
-        MessageStructure structure=new MessageStructure();
+        MessageStructure structure = new MessageStructure();
         structure.addToLastRow("מצב החוק:");
         structure.addToLastRow(status);
 
@@ -46,41 +70,34 @@ public class GetLawStatus implements VotingCommand {
             structure.addToLastRow("שעות");
             structure.addToLastRow(law.minutesLeft());
             structure.addToLastRow("דקות.");
-
         }
         if (!law.isAnonymousVoting()) {
-
-            structure.addRow("   בעד");
-
-            for (Vote vote : votes
+            structure.addRow("בעד");
+            for (String member : forVotes
             ) {
-                if (vote.getVote() == Vote.FOR) {
-                    structure.addRow((new Member(vote.getMemberID()).getName()));
-
-                }
+                structure.addRow("      ");
+                structure.addToLastRow(member);
             }
-            structure.addRow("   נגד");
-
-            for (Vote vote : votes
+            structure.addRow("נגד");
+            for (String member : againstVotes
             ) {
-                if (vote.getVote() == Vote.AGAINST) {
-                    structure.addRow((new Member(vote.getMemberID()).getName()));
-
-                }
+                structure.addRow("      ");
+                structure.addToLastRow(member);
             }
-            structure.addRow("   נמנע");
-
-            for (Vote vote : votes
+            structure.addRow("נמנע");
+            for (String member : neutralVotes
             ) {
-                if (vote.getVote() == Vote.NEUTRAL) {
-                    structure.addRow((new Member(vote.getMemberID()).getName()));
-                }
+                structure.addRow("      ");
+                structure.addToLastRow(member);
+
             }
         }
+
         structure.addRow(law.getDescription());
         String res = structure.getString();
         return new MessageToSend(res, askerNum);
     }
+
 
     public GetLawStatus(Law law, String askerNum) {
         this.law = law;
@@ -88,8 +105,8 @@ public class GetLawStatus implements VotingCommand {
     }
 
     public static void main(String[] args) throws SQLException, ParseException {
-        Law law=new Law(376);
-        GetLawStatus getLawStatus=new GetLawStatus(law, "4tr");
+        Law law = new Law(376);
+        GetLawStatus getLawStatus = new GetLawStatus(law, "4tr");
         System.out.println(getLawStatus.message().getContent());
     }
 }

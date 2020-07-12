@@ -89,9 +89,9 @@ public class Member {
         String query = "SELECT * FROM voting.member where phone='" + phone+"';";
         // create the java statement
         Statement st = conn.createStatement();
-        // execute the query, and get a java resultset
+        // execute the query, and get a java result set
         ResultSet rs = st.executeQuery(query);
-        // iterate through the java resultset
+        // iterate through the java result set
         while (rs.next()) {
             this.id=rs.getInt("id");
             phone = rs.getString("phone");

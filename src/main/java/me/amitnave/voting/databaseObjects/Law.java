@@ -130,6 +130,7 @@ public class Law {
         }
         st.close();
     }
+
     public String minutesLeft() throws ParseException {
         java.util.Date date = dateFormat.parse(this.date);
         java.util.Date now = dateFormat.parse(now());
