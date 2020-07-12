@@ -19,7 +19,7 @@ public class CancelLawParser implements CommandParser {
         try {
             String content = message.getContent();
             int lawID = Integer.parseInt(content.substring(content.indexOf('#') + 1));
-            Law law=new Law(lawID);
+            law=new Law(lawID);
             if (!message.isPrivate()) return false;
             return new Member(law.getCreator()).getPhone().equals(message.getSender());
         }
