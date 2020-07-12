@@ -21,6 +21,8 @@ public class Law {
     public static final int passed = 0;
     public static final int failed = 1;
     public static final int inProcess = 2;
+    public static final int invalidated = 3;
+    public static final int canceled = 4;
     public static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public Law(String description, int creator, int status, String date, boolean anonymousVoting,
@@ -100,6 +102,11 @@ public class Law {
                 anonymousCreator == law.anonymousCreator &&
                 Objects.equals(description, law.description) &&
                 Objects.equals(date, law.date);
+    }
+
+    public void invalidate() throws SQLException {
+        status = invalidated;
+        DBHelper.update("update voting.law set status=" + invalidated + " where id=" + id + ";");
     }
 
 
