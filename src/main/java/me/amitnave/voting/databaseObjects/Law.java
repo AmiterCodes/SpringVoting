@@ -185,8 +185,8 @@ public class Law {
         return true;
     }
     public void cancel() throws SQLException {
-        status = failed;
-        DBHelper.update("update voting.law set status="+failed+" where id="+id+";");
+        status = canceled;
+        DBHelper.update("update voting.law set status="+canceled+" where id="+id+";");
     }
     public List<Vote> getVotes() throws SQLException {
         List<Vote> votes=new ArrayList<>();
