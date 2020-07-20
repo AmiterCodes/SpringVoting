@@ -10,21 +10,27 @@ public class Member {
     private int id;
     private String phone;
     private String name;
+    private boolean active;
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Member)) return false;
         Member member = (Member) o;
-        return id == member.id &&
-                Objects.equals(phone, member.phone) &&
-                Objects.equals(name, member.name);
+        return getId() == member.getId() &&
+                active == member.active &&
+                Objects.equals(getPhone(), member.getPhone()) &&
+                Objects.equals(getName(), member.getName());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getPhone(), getName(), active);
+    }
 
     public String getName() {
         return name;
@@ -44,6 +50,7 @@ public class Member {
         return phone;
     }
 
+
     public Member(int id) throws SQLException {
         // create our mysql database connection
         Connection conn = DBHelper.getConnection();
@@ -59,6 +66,7 @@ public class Member {
             this.id=rs.getInt("id");
             phone = rs.getString("phone");
             name = rs.getString("name");
+            active = rs.getBoolean("active");
         }
         st.close();
     }
@@ -66,7 +74,7 @@ public class Member {
         Connection conn = DBHelper.getConnection();
         // our SQL SELECT query.
         // if you only need a few columns, specify them by name instead of using "*"
-        String query = "SELECT * FROM voting.member where phone='" + phone+"';";
+        String query = "SELECT * FROM voting.member where phone='" + phone+"' AND active = 1;";
         // create the java statement
         Statement st = conn.createStatement();
         // execute the query, and get a java resultset
@@ -95,6 +103,7 @@ public class Member {
         while (rs.next()) {
             this.id=rs.getInt("id");
             phone = rs.getString("phone");
+            active = rs.getBoolean("active");
             name = rs.getString("name");
         }
         st.close();
@@ -114,6 +123,7 @@ public class Member {
             this.id=rs.getInt("id");
             phone = rs.getString("phone");
             this.name = rs.getString("name");
+
         }
         st.close();
     }
