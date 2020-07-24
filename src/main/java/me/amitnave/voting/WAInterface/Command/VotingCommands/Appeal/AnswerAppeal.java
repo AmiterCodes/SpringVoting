@@ -25,7 +25,7 @@ public class AnswerAppeal implements VotingCommand {
         MessageStructure structure=new MessageStructure();
         structure.addRow("*הגשת ערעור #");
         structure.addToLastRow(appeal.getId()+"*");
-        structure.addRow("מערער:");
+        structure.addRow("*מערער:*");
         structure.addToLastRow((new Member(appeal.getAppealer()).getName()));
 
         Law law=new Law(appeal.getLaw());
@@ -37,13 +37,13 @@ public class AnswerAppeal implements VotingCommand {
         else
             structure.addToLastRow(new Member(law.getCreator()).getName());
 
-        structure.addRow("תיאור:");
+        structure.addRow("*תיאור:* ");
         structure.addToLastRow(law.getDescription());
 
-        structure.addRow("סיבת הערעור:");
+        structure.addRow("*סיבת הערעור:* ");
         structure.addToLastRow(appeal.getReason());
 
-        structure.addRow("*סטטוס הערעור: *");
+        structure.addRow("*סטטוס הערעור:* ");
         if (appeal.getStatus()== Appeal.approved){
             structure.addToLastRow("הערעור התקבל, והחוק בוטל.");
         }

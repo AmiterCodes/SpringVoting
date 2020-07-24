@@ -26,8 +26,10 @@ public class GetPassesLaws implements VotingCommand {
         List<Law> passed = Law.getLawsByStatus(Law.passed);
         if (passed.size() == 0) return new MessageToSend("אין חוקים שעברו", askerID);
         MessageStructure structure = new MessageStructure();
-        for (Law law : passed
-        ) {
+        structure.addRow("*" + "רשימת חוקים שעברו:" + "*");
+        for(int i = passed.size() - 1; i >= 0; i--) {
+            Law law = passed.get(i);
+            structure.addRow("*" + "חוק #" + law.getId() + "*");
             structure.addRow(law.getDescription());
             structure.addRow("");
         }

@@ -26,7 +26,7 @@ public class PassLaw implements VotingCommand {
         MessageStructure structure=new MessageStructure();
         structure.addToLastRow("הצעת חוק #");
         structure.addToLastRow(law.getId()+"");
-        structure.addRow("הוגה:");
+        structure.addRow("*הוגה:*");
         if (law.isAnonymousCreator()) {
             structure.addToLastRow("אנונימי");
         } else {
@@ -36,7 +36,7 @@ public class PassLaw implements VotingCommand {
         structure.addRow(law.getDescription());
 
         if (law.isAnonymousVoting()) {
-            structure.addRow("הצבעה אנונימית");
+            structure.addRow("*הצבעה אנונימית*");
         }
 
 
