@@ -82,7 +82,7 @@ public class WhatsappVotingSystem {
                 ms.addRow("נמנע - ");
                 ms.addToLastRow(neutral + "");
                 ms.addRow(law.getDescription());
-                MessageToSend m = new MessageToSend(ms.getString(), Settings.getCouncilChatID());
+                MessageToSend m = new MessageToSend(ms.getString(), Settings.getReichChat());
                 list.add(m);
             }
         }

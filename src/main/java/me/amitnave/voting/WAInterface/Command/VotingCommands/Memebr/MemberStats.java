@@ -31,8 +31,10 @@ public class MemberStats implements VotingCommand {
     @Override
     public MessageToSend message() throws SQLException, ParseException {
         MessageStructure structure = new MessageStructure();
+        structure.addToLastRow("*");
         structure.addToLastRow("סטטיסטיקה עבור ");
         structure.addToLastRow(member.getName());
+        structure.addToLastRow("*");
         Connection conn = DBHelper.getConnection();
         // our SQL SELECT query.
         // if you only need a few columns, specify them by name instead of using "*"
@@ -77,29 +79,32 @@ public class MemberStats implements VotingCommand {
                 neutralVote++;
         }
         st.close();
-        structure.addRow("סטטיסטיקת חוקים (לא כולל חוקים ממקור אנונימי)");
-        structure.addRow("חוקים שהוצעו:");
+        structure.addRow("*סטטיסטיקת חוקים* (לא כולל חוקים ממקור אנונימי)");
+        structure.addRow("  *חוקים שהוצעו:* ");
         structure.addToLastRow(passed + failed + inProcess + invalidated + canceled + "");
-        structure.addRow("עברו- ");
+        structure.addRow("  *עברו-* ");
         structure.addToLastRow(passed + "");
-        structure.addRow("לא עברו- ");
+        structure.addRow("  *לא עברו-* ");
         structure.addToLastRow(failed + "");
-        structure.addRow("בתהליך הצבעה- ");
+        structure.addRow("  *בתהליך הצבעה-* ");
         structure.addToLastRow(inProcess + "");
-        structure.addRow("נפסלו על ידי הנשיא- ");
+        structure.addRow("  *נפסלו על ידי הנשיא-* ");
         structure.addToLastRow(invalidated + "");
-        structure.addRow("בוטלו על ידי היוצר- ");
+        structure.addRow("  *בוטלו על ידי היוצר-* ");
         structure.addToLastRow(canceled + "");
         structure.addRow("");
-        structure.addRow("סטטיסטיקת הצבעות (לא כולל אנונימיות)");
-        structure.addRow("כמות הצבעות כוללת: ");
+        structure.addRow("*סטטיסטיקת הצבעות* (לא כולל אנונימיות)");
+        structure.addRow("  *כמות הצבעות כוללת:* ");
         structure.addToLastRow(forVote + againstVote + neutralVote + "");
-        structure.addRow("הצבעות בעד- ");
+        structure.addRow("  *הצבעות בעד-* ");
         structure.addToLastRow(forVote + "");
-        structure.addRow("הצבעות נגד- ");
+        structure.addRow("  *הצבעות נגד-* ");
         structure.addToLastRow(againstVote + "");
-        structure.addRow("הצבעות נמנע- ");
+        structure.addRow("  *הצבעות נמנע-* ");
         structure.addToLastRow(neutralVote + "");
+        double precentage = (forVote + 0.5 * neutralVote) / (forVote + againstVote + neutralVote);
+        structure.addRow(" *חיוביות הצבעות-* ");
+        structure.addToLastRow((precentage * 100 + "    ").substring(0, 4) + "%");
         return new MessageToSend(structure.getString(), askerID);
     }
 }

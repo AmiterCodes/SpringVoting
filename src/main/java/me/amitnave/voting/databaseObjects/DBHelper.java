@@ -10,6 +10,15 @@ public class DBHelper {
     private static final String localhost = "jdbc:mysql://localhost:3307/voting";
     private static final String root = "root";
     private static final String password = "12345";
+    private static Connection connection;
+
+    static {
+        try {
+            connection = DriverManager.getConnection(localhost, root, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main() throws SQLException, ClassNotFoundException {
 
@@ -28,7 +37,10 @@ public class DBHelper {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(localhost, root, password);
+        if(connection.isClosed()) {
+            connection = DriverManager.getConnection(localhost, root, password);
+        }
+        return connection;
     }
 
     public static int insert(String sql) throws SQLException {
