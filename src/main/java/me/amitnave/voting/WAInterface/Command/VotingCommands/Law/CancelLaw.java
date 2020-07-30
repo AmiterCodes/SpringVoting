@@ -9,6 +9,7 @@ import me.amitnave.voting.databaseObjects.Member;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.List;
 
 public class CancelLaw implements VotingCommand {
     private Law law;
@@ -22,7 +23,7 @@ public class CancelLaw implements VotingCommand {
     }
 
     @Override
-    public MessageToSend message() throws SQLException, ParseException {
+    public List<MessageToSend> message() throws SQLException, ParseException {
         MessageStructure structure=new MessageStructure();
         structure.addToLastRow("חוק #");
         structure.addToLastRow(law.getId()+"");
@@ -32,6 +33,6 @@ public class CancelLaw implements VotingCommand {
         else
             structure.addToLastRow(new Member(law.getCreator()).getName());
         structure.addRow(law.getDescription());
-        return new MessageToSend(structure.getString(), Settings.getCouncilChatID());
+        return (List<MessageToSend>) new MessageToSend(structure.getString(), Settings.getCouncilChatID());
     }
 }

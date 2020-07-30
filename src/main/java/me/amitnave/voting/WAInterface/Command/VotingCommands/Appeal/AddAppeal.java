@@ -10,6 +10,8 @@ import me.amitnave.voting.databaseObjects.Member;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AddAppeal implements VotingCommand {
     private Appeal appeal;
@@ -20,12 +22,13 @@ public class AddAppeal implements VotingCommand {
     }
 
     @Override
-    public MessageToSend message() throws SQLException, ParseException {
+    public List<MessageToSend> message() throws SQLException, ParseException {
+        Member appealer=new Member(appeal.getAppealer());
         MessageStructure structure=new MessageStructure();
         structure.addToLastRow("הגשת ערעור #");
         structure.addToLastRow(appeal.getId()+"");
         structure.addRow("מערער: ");
-        structure.addToLastRow((new Member(appeal.getAppealer()).getName()));
+        structure.addToLastRow(appealer.getName());
         Law law=new Law(appeal.getLaw());
         structure.addRow("ערעור על חוק #");
         structure.addToLastRow(law.getId()+"");
@@ -34,17 +37,15 @@ public class AddAppeal implements VotingCommand {
         structure.addRow("סיבת הערעור: ");
         structure.addToLastRow(appeal.getReason());
         String res = structure.getString();
-        return new MessageToSend(res, Settings.getPresidentChatID());
+        List<MessageToSend> mts=new LinkedList<>();
+        mts.add(new MessageToSend(res, Settings.getPresidentChatID()));
+        mts.add(new MessageToSend( "הערעור התקבל בהצלחה",appealer.getPhone()));
+        return mts;
     }
 
     public AddAppeal(Appeal appeal) {
         this.appeal = appeal;
     }
 
-    public static void main(String[] args) throws SQLException, ParseException {
-        Appeal appeal=new Appeal(370,5,"בגלל הדברים");
-        AddAppeal addAppeal=new AddAppeal(appeal);
-        addAppeal.DatabaseAction();
-        System.out.println(addAppeal.message().getContent());
-    }
+
 }

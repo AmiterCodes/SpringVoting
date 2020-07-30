@@ -22,9 +22,9 @@ public class GetPassesLaws implements VotingCommand {
     }
 
     @Override
-    public MessageToSend message() throws SQLException, ParseException {
+    public List<MessageToSend> message() throws SQLException, ParseException {
         List<Law> passed = Law.getLawsByStatus(Law.passed);
-        if (passed.size() == 0) return new MessageToSend("אין חוקים שעברו", askerID);
+        if (passed.size() == 0) return (List<MessageToSend>) new MessageToSend("אין חוקים שעברו", askerID);
         MessageStructure structure = new MessageStructure();
         structure.addRow("*" + "רשימת חוקים שעברו:" + "*");
         for(int i = passed.size() - 1; i >= 0; i--) {
@@ -33,6 +33,6 @@ public class GetPassesLaws implements VotingCommand {
             structure.addRow(law.getDescription());
             structure.addRow("");
         }
-        return new MessageToSend(structure.getString(), askerID);
+        return (List<MessageToSend>) new MessageToSend(structure.getString(), askerID);
     }
 }

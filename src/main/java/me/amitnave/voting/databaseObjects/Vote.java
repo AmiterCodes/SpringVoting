@@ -1,9 +1,14 @@
 package me.amitnave.voting.databaseObjects;
 
+import me.amitnave.voting.WAInterface.Message.MessageToSend;
+
+import javax.management.Query;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Vote {
     public static final int FOR = 0;
@@ -17,15 +22,27 @@ public class Vote {
         Connection conn = DBHelper.getConnection();
         // our SQL SELECT query.
         // if you only need a few columns, specify them by name instead of using "*"
-        String query = "SELECT * FROM voting.vote WHERE member = "+memberID+" AND law = "+lawID+";";
+        String query = "SELECT * FROM voting.vote WHERE member = " + memberID + " AND law = " + lawID + ";";
         // create the java statement
         Statement st = conn.createStatement();
         // execute the query, and get a java resultset
         ResultSet rs = st.executeQuery(query);
         // iterate through the java resultset
-        boolean isMember=rs.next();
+        boolean isMember = rs.next();
         st.close();
         return isMember;
+    }
+
+    public static List<Vote> votesForLawsByStatus(int status) throws SQLException {
+        Connection connection = DBHelper.getConnection();
+        Statement st = connection.createStatement();
+        String query = "SELECT * FROM vote INNER JOIN law ON vote.law = law.id WHERE law.status =" + status + ";";
+        ResultSet rs = st.executeQuery(query);
+        List<Vote> votes = new LinkedList<>();
+        while (rs.next()) {
+            votes.add(new Vote(rs.getInt("law"), rs.getInt("member"), rs.getInt("id")));
+        }
+        return votes;
     }
 
     public Vote(int lawID, int memberID, int vote) {
@@ -33,10 +50,11 @@ public class Vote {
         this.memberID = memberID;
         this.vote = vote;
     }
+
     public void insert() throws SQLException {
-        String sql="insert into voting.vote (law, member,vote) values ("+lawID+","+memberID+","+vote+");";
-        if(Vote.AlreadyVoted(memberID, lawID)) {
-            sql = "UPDATE voting.vote SET vote = "+vote+" WHERE member = "+memberID+" AND law = "+lawID+";";
+        String sql = "insert into voting.vote (law, member,vote) values (" + lawID + "," + memberID + "," + vote + ");";
+        if (Vote.AlreadyVoted(memberID, lawID)) {
+            sql = "UPDATE voting.vote SET vote = " + vote + " WHERE member = " + memberID + " AND law = " + lawID + ";";
             DBHelper.update(sql);
             return;
         }
@@ -48,7 +66,7 @@ public class Vote {
     }
 
     public Vote(int id) throws SQLException {
-        String query = "select * from voting.vote where id="+id+";";
+        String query = "select * from voting.vote where id=" + id + ";";
         Statement st;
         Connection conn = DBHelper.getConnection();
 

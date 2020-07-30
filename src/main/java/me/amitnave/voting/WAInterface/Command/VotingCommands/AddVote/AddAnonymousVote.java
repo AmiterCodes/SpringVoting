@@ -7,6 +7,7 @@ import me.amitnave.voting.databaseObjects.Vote;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.List;
 
 public class AddAnonymousVote implements VotingCommand {
     private Vote vote;
@@ -21,9 +22,9 @@ public class AddAnonymousVote implements VotingCommand {
     }
 
     @Override
-    public MessageToSend message() throws SQLException, ParseException {
+    public List<MessageToSend> message() throws SQLException, ParseException {
         String approval = new Member(vote.getMemberID())
                 .getName()+ ", הצבעתך נקלטה בהצלחה.";
-        return new MessageToSend(approval,(new Member(vote.getMemberID())).getPhone());
+        return (List<MessageToSend>) new MessageToSend(approval,(new Member(vote.getMemberID())).getPhone());
     }
 }

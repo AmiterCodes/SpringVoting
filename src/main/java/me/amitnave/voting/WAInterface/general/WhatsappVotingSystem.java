@@ -11,6 +11,7 @@ import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.GetLawStatusPars
 import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.GetPassedLawsParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.PassLawParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.MemberParser.MemberStatsParser;
+import me.amitnave.voting.WAInterface.Command.Parsers.MemberParser.UnvotedLawsParser;
 import me.amitnave.voting.WAInterface.Command.VotingCommand;
 import me.amitnave.voting.WAInterface.Message.Message;
 import me.amitnave.voting.WAInterface.Message.MessageStructure;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WhatsappVotingSystem {
+    private Reminder reminder = new Reminder();
     private List<CommandParser> parsers = List.of(
             new AddAnonymousVoteParser(),
             new AddVoteParser(),
@@ -34,27 +36,31 @@ public class WhatsappVotingSystem {
             new HelpParser(),
             new CancelLawParser(),
             new GetPassedLawsParser(),
-            new MemberStatsParser()
+            new MemberStatsParser(),
+            new UnvotedLawsParser()
     );
+
     public VotingCommand parseMessage(Message message) throws SQLException, ParseException {
-        for (CommandParser parser: parsers
-             ) {
+        for (CommandParser parser : parsers
+        ) {
             if (parser.isLegalCommand(message))
                 return parser.getCommand();
         }
         return null;
     }
 
-
+    public List<MessageToSend> remindMembers() throws SQLException, ParseException {
+        return  reminder.remindMessages();
+    }
 
     public List<MessageToSend> updateLaws() throws SQLException, ParseException {
-        List<Law> laws= Law.getLawsByStatus(Law.inProcess);
+        List<Law> laws = Law.getLawsByStatus(Law.inProcess);
         List<MessageToSend> list = new ArrayList<>();
-        for (Law law: laws) {
-            if(law.updateStatus()) {
+        for (Law law : laws) {
+            if (law.updateStatus()) {
                 MessageStructure ms = new MessageStructure();
                 ms.addToLastRow("הצעת חוק #");
-                ms.addToLastRow(""+law.getId());
+                ms.addToLastRow("" + law.getId());
                 ms.addRow("תוצאה: ");
                 ms.addToLastRow(law.getStatus() == Law.failed ? "לא עבר" : "עבר");
                 var votes = law.getVotes();
@@ -88,9 +94,6 @@ public class WhatsappVotingSystem {
         }
         return list;
     }
-
-
-
 
 
 }

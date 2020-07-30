@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class Member {
@@ -63,24 +65,25 @@ public class Member {
         ResultSet rs = st.executeQuery(query);
         // iterate through the java resultset
         while (rs.next()) {
-            this.id=rs.getInt("id");
+            this.id = rs.getInt("id");
             phone = rs.getString("phone");
             name = rs.getString("name");
             active = rs.getBoolean("active");
         }
         st.close();
     }
+
     public static boolean isMember(String phone) throws SQLException {
         Connection conn = DBHelper.getConnection();
         // our SQL SELECT query.
         // if you only need a few columns, specify them by name instead of using "*"
-        String query = "SELECT * FROM voting.member where phone='" + phone+"' AND active = 1;";
+        String query = "SELECT * FROM voting.member where phone='" + phone + "' AND active = 1;";
         // create the java statement
         Statement st = conn.createStatement();
         // execute the query, and get a java resultset
         ResultSet rs = st.executeQuery(query);
         // iterate through the java resultset
-        boolean isMember=rs.next();
+        boolean isMember = rs.next();
         st.close();
         return isMember;
     }
@@ -94,33 +97,34 @@ public class Member {
         Connection conn = DBHelper.getConnection();
         // our SQL SELECT query.
         // if you only need a few columns, specify them by name instead of using "*"
-        String query = "SELECT * FROM voting.member where phone='" + phone+"';";
+        String query = "SELECT * FROM voting.member where phone='" + phone + "';";
         // create the java statement
         Statement st = conn.createStatement();
         // execute the query, and get a java result set
         ResultSet rs = st.executeQuery(query);
         // iterate through the java result set
         while (rs.next()) {
-            this.id=rs.getInt("id");
+            this.id = rs.getInt("id");
             phone = rs.getString("phone");
             active = rs.getBoolean("active");
             name = rs.getString("name");
         }
         st.close();
     }
+
     public Member(String name, boolean b) throws SQLException {
         // create our mysql database connection
         Connection conn = DBHelper.getConnection();
         // our SQL SELECT query.
         // if you only need a few columns, specify them by name instead of using "*"
-        String query = "SELECT * FROM voting.member where name='" + name+"';";
+        String query = "SELECT * FROM voting.member where name='" + name + "';";
         // create the java statement
         Statement st = conn.createStatement();
         // execute the query, and get a java result set
         ResultSet rs = st.executeQuery(query);
         // iterate through the java result set
         while (rs.next()) {
-            this.id=rs.getInt("id");
+            this.id = rs.getInt("id");
             phone = rs.getString("phone");
             this.name = rs.getString("name");
 
@@ -128,5 +132,23 @@ public class Member {
         st.close();
     }
 
+    public static List<Member> getMembers() throws SQLException {
+        Connection con= DBHelper.getConnection();
+        Statement st = con.createStatement();
+        String sql = "SELECT * FROM member WHERE active = 1;";
+        ResultSet rs = st.executeQuery(sql);
+        List<Member> members = new LinkedList<>();
+        while (rs.next()) {
+            Member member = new Member(rs.getInt("id"), rs.getString("phone"), rs.getString("name"));
+            members.add(member);
+        }
+        st.close();
+        return members;
+    }
 
+    public Member(int id, String phone, String name) {
+        this.id = id;
+        this.phone = phone;
+        this.name = name;
+    }
 }

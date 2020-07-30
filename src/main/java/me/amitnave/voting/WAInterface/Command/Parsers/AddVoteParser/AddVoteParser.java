@@ -20,21 +20,20 @@ public class AddVoteParser implements CommandParser {
 
         vote = ConvertStatus(message.getContent());
         if (!message.isRepliedToBot() || vote == -1 ||
-                !message.getChatID().equals(Settings.getCouncilChatID())) {
+                (!message.getChatID().equals(Settings.getCouncilChatID()) && !message.isPrivate())) {
             return false;
         }
 
         if (!Member.isMember(message.getSender())) return false;
         memberID = new Member(message.getSender()).getId();
-        String header=message.getRepliedMessage().split("\n")[0];
+        String header = message.getRepliedMessage().split("\n")[0];
         if (!header.startsWith("הצעת חוק #")) return false;
         try {
-            lawID=Integer.parseInt(header.substring(header.indexOf('#')+1));
+            lawID = Integer.parseInt(header.substring(header.indexOf('#') + 1));
 
-            if (new Law(lawID).getDescription()==null) return false;
+            if (new Law(lawID).getDescription() == null) return false;
             return !new Law(lawID).isAnonymousVoting();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
 

@@ -5,7 +5,6 @@ import me.amitnave.voting.WAInterface.Message.MessageStructure;
 import me.amitnave.voting.WAInterface.Message.MessageToSend;
 import me.amitnave.voting.databaseObjects.DBHelper;
 import me.amitnave.voting.databaseObjects.Law;
-import me.amitnave.voting.databaseObjects.Member;
 import me.amitnave.voting.databaseObjects.Vote;
 
 import java.sql.Connection;
@@ -26,7 +25,7 @@ public class GetLawStatus implements VotingCommand {
     }
 
     @Override
-    public MessageToSend message() throws SQLException, ParseException {
+    public List<MessageToSend> message() throws SQLException, ParseException {
         Connection conn = DBHelper.getConnection();
         // our SQL SELECT query.
         // if you only need a few columns, specify them by name instead of using "*"
@@ -95,7 +94,7 @@ public class GetLawStatus implements VotingCommand {
 
         structure.addRow(law.getDescription());
         String res = structure.getString();
-        return new MessageToSend(res, askerNum);
+        return (List<MessageToSend>) new MessageToSend(res, askerNum);
     }
 
 
@@ -104,9 +103,5 @@ public class GetLawStatus implements VotingCommand {
         this.askerNum = askerNum;
     }
 
-    public static void main(String[] args) throws SQLException, ParseException {
-        Law law = new Law(376);
-        GetLawStatus getLawStatus = new GetLawStatus(law, "4tr");
-        System.out.println(getLawStatus.message().getContent());
-    }
+
 }

@@ -5,6 +5,7 @@ import me.amitnave.voting.WAInterface.Message.MessageToSend;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.List;
 
 public class Help implements VotingCommand {
     private String askerID;
@@ -18,8 +19,8 @@ public class Help implements VotingCommand {
     }
 
     @Override
-    public MessageToSend message() throws SQLException, ParseException {
-        return new MessageToSend("תמיכת פקודות\n" +
+    public List<MessageToSend> message() throws SQLException, ParseException {
+        return (List<MessageToSend>) new MessageToSend("תמיכת פקודות\n" +
                 "\n" +
                 "#הצעת חוק\n" +
                 "#הצבעה אנונימית (אופציונלי)\n" +

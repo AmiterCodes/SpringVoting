@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import java.util.List;
 
 public class MemberStats implements VotingCommand {
     private Member member;
@@ -29,7 +30,7 @@ public class MemberStats implements VotingCommand {
     }
 
     @Override
-    public MessageToSend message() throws SQLException, ParseException {
+    public List<MessageToSend> message() throws SQLException, ParseException {
         MessageStructure structure = new MessageStructure();
         structure.addToLastRow("*");
         structure.addToLastRow("סטטיסטיקה עבור ");
@@ -105,6 +106,6 @@ public class MemberStats implements VotingCommand {
         double precentage = (forVote + 0.5 * neutralVote) / (forVote + againstVote + neutralVote);
         structure.addRow(" *חיוביות הצבעות-* ");
         structure.addToLastRow((precentage * 100 + "    ").substring(0, 4) + "%");
-        return new MessageToSend(structure.getString(), askerID);
+        return (List<MessageToSend>) new MessageToSend(structure.getString(), askerID);
     }
 }

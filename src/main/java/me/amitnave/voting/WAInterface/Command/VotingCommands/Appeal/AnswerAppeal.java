@@ -10,6 +10,7 @@ import me.amitnave.voting.databaseObjects.Member;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.List;
 
 public class AnswerAppeal implements VotingCommand {
     private Appeal appeal;
@@ -21,7 +22,7 @@ public class AnswerAppeal implements VotingCommand {
     }
 
     @Override
-    public MessageToSend message() throws SQLException, ParseException {
+    public List<MessageToSend> message() throws SQLException, ParseException {
         MessageStructure structure=new MessageStructure();
         structure.addRow("*הגשת ערעור #");
         structure.addToLastRow(appeal.getId()+"*");
@@ -56,7 +57,7 @@ public class AnswerAppeal implements VotingCommand {
 
 
         String res = structure.getString();
-        return new MessageToSend(res, Settings.getCouncilChatID());
+        return (List<MessageToSend>) new MessageToSend(res, Settings.getCouncilChatID());
     }
 
     public AnswerAppeal(Appeal appeal, boolean approved, String reason) {
@@ -65,10 +66,5 @@ public class AnswerAppeal implements VotingCommand {
         this.reason = reason;
     }
 
-    public static void main(String[] args) throws SQLException, ParseException {
-        Appeal appeal=new Appeal(5);
-        AnswerAppeal answerAppeal=new AnswerAppeal(appeal,true, "stghsfgh");
-        answerAppeal.DatabaseAction();
-        System.out.println(answerAppeal.message().getContent());
-    }
+
 }

@@ -8,6 +8,7 @@ import me.amitnave.voting.databaseObjects.Law;
 import me.amitnave.voting.databaseObjects.Member;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class PassLaw implements VotingCommand {
     private Law law;
@@ -22,7 +23,14 @@ public class PassLaw implements VotingCommand {
     }
 
     @Override
-    public MessageToSend message() throws SQLException {
+    public List<MessageToSend> message() throws SQLException {
+        String res = LowMessage(law);
+        return (List<MessageToSend>) new MessageToSend(res, Settings.getCouncilChatID());
+    }
+
+
+
+    public static String LowMessage(Law law) throws SQLException {
         MessageStructure structure=new MessageStructure();
         structure.addToLastRow("הצעת חוק #");
         structure.addToLastRow(law.getId()+"");
@@ -41,14 +49,8 @@ public class PassLaw implements VotingCommand {
 
 
         String res = structure.getString();
-        return new MessageToSend(res, Settings.getCouncilChatID());
+        return res;
     }
 
-    public static void main(String[] args) throws SQLException {
-        Law law=new Law("srg",4, Law.inProcess, Law.now(),false,false);
 
-        PassLaw passLaw=new PassLaw(law);
-        passLaw.DatabaseAction();
-        System.out.println(passLaw.message().getContent());
-    }
 }
