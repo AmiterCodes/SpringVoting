@@ -57,7 +57,7 @@ public class AnswerAppeal implements VotingCommand {
 
 
         String res = structure.getString();
-        return (List<MessageToSend>) new MessageToSend(res, Settings.getCouncilChatID());
+        return List.of(new MessageToSend(res, Settings.getCouncilChatID()));
     }
 
     public AnswerAppeal(Appeal appeal, boolean approved, String reason) {

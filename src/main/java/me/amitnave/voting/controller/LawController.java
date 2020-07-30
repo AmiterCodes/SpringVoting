@@ -37,7 +37,7 @@ public class LawController {
     @ResponseBody
     @CrossOrigin
     @RequestMapping(value = "/message", method = POST)
-    public MessageToSend message(@RequestBody ObjectNode node) throws SQLException, ParseException {
+    public List<MessageToSend> message(@RequestBody ObjectNode node) throws SQLException, ParseException {
         String content=  node.get("content").asText();
         String chatId=  node.get("chatId").asText();
         String repliedMessage=  node.get("repliedMessage").asText();

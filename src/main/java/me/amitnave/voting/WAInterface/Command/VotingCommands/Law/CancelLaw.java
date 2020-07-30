@@ -25,14 +25,16 @@ public class CancelLaw implements VotingCommand {
     @Override
     public List<MessageToSend> message() throws SQLException, ParseException {
         MessageStructure structure=new MessageStructure();
+        Member member = new Member(law.getCreator());
         structure.addToLastRow("חוק #");
         structure.addToLastRow(law.getId()+"");
         structure.addToLastRow(" בוטל על ידי יוצרו ");
         if (law.isAnonymousCreator())
             structure.addToLastRow("האנונימי");
         else
-            structure.addToLastRow(new Member(law.getCreator()).getName());
+            structure.addToLastRow(member.getName());
         structure.addRow(law.getDescription());
-        return (List<MessageToSend>) new MessageToSend(structure.getString(), Settings.getCouncilChatID());
+        return List.of(new MessageToSend(structure.getString(), Settings.getCouncilChatID()),
+                new MessageToSend("החוק בוטל בהצלחה",member.getPhone()));
     }
 }

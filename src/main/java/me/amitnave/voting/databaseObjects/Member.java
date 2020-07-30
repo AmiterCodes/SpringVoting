@@ -105,7 +105,7 @@ public class Member {
         // iterate through the java result set
         while (rs.next()) {
             this.id = rs.getInt("id");
-            phone = rs.getString("phone");
+            this.phone = rs.getString("phone");
             active = rs.getBoolean("active");
             name = rs.getString("name");
         }

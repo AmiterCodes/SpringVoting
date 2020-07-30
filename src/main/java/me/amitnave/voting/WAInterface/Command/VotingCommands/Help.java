@@ -20,7 +20,7 @@ public class Help implements VotingCommand {
 
     @Override
     public List<MessageToSend> message() throws SQLException, ParseException {
-        return (List<MessageToSend>) new MessageToSend("תמיכת פקודות\n" +
+        return List.of(new MessageToSend("תמיכת פקודות\n" +
                 "\n" +
                 "#הצעת חוק\n" +
                 "#הצבעה אנונימית (אופציונלי)\n" +
@@ -63,6 +63,6 @@ public class Help implements VotingCommand {
                 "\n" +
                 "סטטיסטיקה על חבר מועצה:\n" +
                 "#סטטיסטיקה שם\n" +
-                "דוגמה: #סטטיסטיקה נחמן", askerID);
+                "דוגמה: #סטטיסטיקה נחמן", askerID));
     }
 }

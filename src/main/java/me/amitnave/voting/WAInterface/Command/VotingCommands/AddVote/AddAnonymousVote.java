@@ -25,6 +25,6 @@ public class AddAnonymousVote implements VotingCommand {
     public List<MessageToSend> message() throws SQLException, ParseException {
         String approval = new Member(vote.getMemberID())
                 .getName()+ ", הצבעתך נקלטה בהצלחה.";
-        return (List<MessageToSend>) new MessageToSend(approval,(new Member(vote.getMemberID())).getPhone());
+        return List.of(new MessageToSend(approval,(new Member(vote.getMemberID())).getPhone()));
     }
 }
