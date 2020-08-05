@@ -29,6 +29,6 @@ class AddVoteParserTest {
         addVoteParser.isLegalCommand(message);
         VotingCommand command=addVoteParser.getCommand();
         command.DatabaseAction();
-        System.out.println(command.message().getContent());
+        System.out.println(command.message().get(0).getContent());
     }
 }

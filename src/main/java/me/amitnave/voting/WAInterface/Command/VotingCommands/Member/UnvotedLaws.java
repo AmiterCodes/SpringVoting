@@ -1,4 +1,4 @@
-package me.amitnave.voting.WAInterface.Command.VotingCommands.Memebr;
+package me.amitnave.voting.WAInterface.Command.VotingCommands.Member;
 
 import me.amitnave.voting.WAInterface.Command.VotingCommand;
 import me.amitnave.voting.WAInterface.Message.MessageToSend;

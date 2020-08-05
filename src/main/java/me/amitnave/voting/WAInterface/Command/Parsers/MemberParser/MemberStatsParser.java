@@ -2,7 +2,7 @@ package me.amitnave.voting.WAInterface.Command.Parsers.MemberParser;
 
 import me.amitnave.voting.WAInterface.Command.CommandParser;
 import me.amitnave.voting.WAInterface.Command.VotingCommand;
-import me.amitnave.voting.WAInterface.Command.VotingCommands.Memebr.MemberStats;
+import me.amitnave.voting.WAInterface.Command.VotingCommands.Member.MemberStats;
 import me.amitnave.voting.WAInterface.Message.Message;
 import me.amitnave.voting.databaseObjects.Member;
 
