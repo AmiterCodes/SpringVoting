@@ -36,6 +36,7 @@ public class Reminder {
         List<Law> laws = Law.getLawsByStatus(Law.inProcess);
         List<Vote> votes = Vote.votesForLawsByStatus(Law.inProcess);
         List<MessageToSend> mts = new LinkedList<>();
+        mts.add(new MessageToSend("אנא הצביע על חוקים אלו:",member.getPhone()));
         for (Law law : laws) {
             if (!(voted(member.getId(), law.getId(), votes))) {
                 mts.add(new MessageToSend(PassLaw.LowMessage(law), member.getPhone()));

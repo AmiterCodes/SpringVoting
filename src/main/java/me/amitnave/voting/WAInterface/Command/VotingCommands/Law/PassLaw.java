@@ -25,7 +25,7 @@ public class PassLaw implements VotingCommand {
     @Override
     public List<MessageToSend> message() throws SQLException {
         String res = LowMessage(law);
-        return (List<MessageToSend>) new MessageToSend(res, Settings.getCouncilChatID());
+        return List.of(new MessageToSend(res, Settings.getCouncilChatID()));
     }
 
 

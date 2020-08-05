@@ -94,7 +94,7 @@ public class GetLawStatus implements VotingCommand {
 
         structure.addRow(law.getDescription());
         String res = structure.getString();
-        return (List<MessageToSend>) new MessageToSend(res, askerNum);
+        return List.of(new MessageToSend(res, askerNum));
     }
 
 

@@ -106,6 +106,6 @@ public class MemberStats implements VotingCommand {
         double precentage = (forVote + 0.5 * neutralVote) / (forVote + againstVote + neutralVote);
         structure.addRow(" *חיוביות הצבעות-* ");
         structure.addToLastRow((precentage * 100 + "    ").substring(0, 4) + "%");
-        return (List<MessageToSend>) new MessageToSend(structure.getString(), askerID);
+        return List.of(new MessageToSend(structure.getString(), askerID));
     }
 }

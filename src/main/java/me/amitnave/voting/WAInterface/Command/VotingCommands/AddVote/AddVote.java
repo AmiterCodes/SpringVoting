@@ -28,6 +28,6 @@ public class AddVote implements VotingCommand {
         else if (this.vote.getVote()== Vote.AGAINST) vote="נגד";
         else vote="נמנע";
         String approval ="הצבעת "+vote+" על חוק #"+this.vote.getLawID();
-        return (List<MessageToSend>) new MessageToSend(approval, (new Member(this.vote.getMemberID())).getPhone());
+        return List.of(new MessageToSend(approval, (new Member(this.vote.getMemberID())).getPhone()));
     }
 }

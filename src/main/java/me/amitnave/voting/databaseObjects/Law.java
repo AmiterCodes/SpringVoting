@@ -194,6 +194,7 @@ public class Law {
         Statement st;
         Connection conn = DBHelper.getConnection();
         st = conn.createStatement();
+
         ResultSet rs = st.executeQuery(sql);
         while (rs.next()) {
             votes.add(new Vote(rs.getInt("law"),rs.getInt("member"), rs.getInt("vote")));
