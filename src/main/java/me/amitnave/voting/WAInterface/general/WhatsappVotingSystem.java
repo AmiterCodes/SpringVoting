@@ -6,10 +6,7 @@ import me.amitnave.voting.WAInterface.Command.Parsers.AddVoteParser.AddVoteParse
 import me.amitnave.voting.WAInterface.Command.Parsers.AppealParser.AddAppealParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.AppealParser.AnswerAppealParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.HelpParser;
-import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.CancelLawParser;
-import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.GetLawStatusParser;
-import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.GetPassedLawsParser;
-import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.PassLawParser;
+import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.*;
 import me.amitnave.voting.WAInterface.Command.Parsers.MemberParser.MemberStatsParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.MemberParser.UnvotedLawsParser;
 import me.amitnave.voting.WAInterface.Command.VotingCommand;
@@ -37,7 +34,8 @@ public class WhatsappVotingSystem {
             new CancelLawParser(),
             new GetPassedLawsParser(),
             new MemberStatsParser(),
-            new UnvotedLawsParser()
+            new UnvotedLawsParser(),
+            new ConstitutionParser()
     );
 
     public VotingCommand parseMessage(Message message) throws SQLException, ParseException {
