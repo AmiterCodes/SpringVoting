@@ -35,7 +35,34 @@ public class WhatsappVotingSystem {
             new GetPassedLawsParser(),
             new MemberStatsParser(),
             new UnvotedLawsParser(),
-            new ConstitutionParser()
+            new ConstitutionParser(),
+            new CommandParser() {
+
+                private String chat;
+                @Override
+                public boolean isLegalCommand(Message message) throws SQLException, ParseException {
+                    if(message.getContent().equals("#קמלמכר")) {
+                        chat = message.getChatID();
+                        return true;
+                    }
+                    return false;
+                }
+
+                @Override
+                public VotingCommand getCommand() throws SQLException, ParseException {
+                    return new VotingCommand() {
+                        @Override
+                        public void DatabaseAction() throws SQLException, ParseException {
+
+                        }
+
+                        @Override
+                        public List<MessageToSend> message() throws SQLException, ParseException {
+                            return List.of(new MessageToSend("כן אני מטריד קטינות, איך ידעת?", chat));
+                        }
+                    };
+                }
+            }
     );
 
     public VotingCommand parseMessage(Message message) throws SQLException, ParseException {
