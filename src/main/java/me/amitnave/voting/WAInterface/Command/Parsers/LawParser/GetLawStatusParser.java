@@ -17,7 +17,7 @@ public class GetLawStatusParser implements CommandParser {
         if (!message.isPrivate()) return false;
         askerNum=message.getChatID();
         String s=message.getContent();
-        if (!s.startsWith("מצב חוק #")) return false;
+        if (!s.startsWith("#")) return false;
         try {
             int lawID=Integer.parseInt(s.substring(s.indexOf('#')+1));
             law=new Law(lawID);

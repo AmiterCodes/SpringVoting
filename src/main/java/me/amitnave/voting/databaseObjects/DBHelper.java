@@ -37,7 +37,8 @@ public class DBHelper {
     }
 
     public static Connection getConnection() throws SQLException {
-        if(connection.isClosed()) {
+
+        if(connection == null || connection.isClosed() ) {
             connection = DriverManager.getConnection(localhost, root, password);
         }
         return connection;
