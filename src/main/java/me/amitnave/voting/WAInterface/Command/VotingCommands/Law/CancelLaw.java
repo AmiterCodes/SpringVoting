@@ -29,9 +29,9 @@ public class CancelLaw implements VotingCommand {
         structure.addToLastRow("חוק #");
         structure.addToLastRow(law.getId()+"");
         structure.addToLastRow(" בוטל על ידי יוצרו ");
-        if (law.isAnonymousCreator())
-            structure.addToLastRow("האנונימי");
-        else
+        if(law.isHasFakeName() || law.isAnonymousCreator()) {
+            structure.addToLastRow(law.anonName());
+        } else
             structure.addToLastRow(member.getName());
         structure.addRow(law.getDescription());
         return List.of(new MessageToSend(structure.getString(), Settings.getCouncilChatID()),

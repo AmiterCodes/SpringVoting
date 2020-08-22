@@ -7,6 +7,7 @@ import me.amitnave.voting.WAInterface.Command.Parsers.AppealParser.AddAppealPars
 import me.amitnave.voting.WAInterface.Command.Parsers.AppealParser.AnswerAppealParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.HelpParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.LawParser.*;
+import me.amitnave.voting.WAInterface.Command.Parsers.MemberParser.ListMembersParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.MemberParser.MemberStatsParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.MemberParser.UnvotedLawsParser;
 import me.amitnave.voting.WAInterface.Command.VotingCommand;
@@ -24,6 +25,7 @@ import java.util.List;
 public class WhatsappVotingSystem {
     private Reminder reminder = new Reminder();
     private List<CommandParser> parsers = List.of(
+            new GetMemberLawsParser(),
             new AddAnonymousVoteParser(),
             new AddVoteParser(),
             new AddAppealParser(),
@@ -32,10 +34,13 @@ public class WhatsappVotingSystem {
             new PassLawParser(),
             new HelpParser(),
             new CancelLawParser(),
-            new GetPassedLawsParser(),
+            new GetStatusLawsParser(),
             new MemberStatsParser(),
             new UnvotedLawsParser(),
             new ConstitutionParser(),
+            new SearchLawParser(),
+            new ExposeCreatorParser(),
+            new ListMembersParser(),
             new CommandParser() {
 
                 private String chat;

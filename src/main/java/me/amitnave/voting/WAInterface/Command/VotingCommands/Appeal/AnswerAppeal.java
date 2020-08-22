@@ -26,15 +26,15 @@ public class AnswerAppeal implements VotingCommand {
         MessageStructure structure=new MessageStructure();
         structure.addRow("*הגשת ערעור #");
         structure.addToLastRow(appeal.getId()+"*");
-        structure.addRow("*מערער:*");
+        structure.addRow("*מערער:*" + " ");
         structure.addToLastRow((new Member(appeal.getAppealer()).getName()));
 
         Law law=new Law(appeal.getLaw());
         structure.addRow("ערעור על חוק #");
         structure.addToLastRow((law.getId()+""));
         structure.addToLastRow((" שהוצע על ידי "));
-        if (new Law(appeal.getLaw()).isAnonymousCreator())
-            structure.addToLastRow(("אנונימי"));
+        if (law.isAnonymousCreator() || law.isHasFakeName())
+            structure.addToLastRow(law.anonName());
         else
             structure.addToLastRow(new Member(law.getCreator()).getName());
 

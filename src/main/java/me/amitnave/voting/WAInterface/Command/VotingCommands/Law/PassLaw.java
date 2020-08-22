@@ -35,8 +35,8 @@ public class PassLaw implements VotingCommand {
         structure.addToLastRow("הצעת חוק #");
         structure.addToLastRow(law.getId()+"");
         structure.addRow("*הוגה:* ");
-        if (law.isAnonymousCreator()) {
-            structure.addToLastRow("אנונימי");
+        if(law.isHasFakeName() || law.isAnonymousCreator()) {
+            structure.addToLastRow(law.anonName());
         } else {
             structure.addToLastRow((new Member(law.getCreator())).getName());
         }

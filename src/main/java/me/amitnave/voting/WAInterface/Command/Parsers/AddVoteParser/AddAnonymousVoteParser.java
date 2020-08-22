@@ -34,9 +34,10 @@ public class AddAnonymousVoteParser implements CommandParser {
         if (!header.startsWith("הצעת חוק #")) return false;
         try {
             lawID=Integer.parseInt(header.substring(header.indexOf('#')+1));
-
-            if (new Law(lawID).getDescription()==null) return false;
-            if (!new Law(lawID).isAnonymousVoting()) return false;
+            Law law = new Law(lawID);
+            if(law.getStatus() != Law.inProcess) return false;
+            if (law.getDescription()==null) return false;
+            if (!law.isAnonymousVoting()) return false;
             return true;
         }
         catch (Exception e){
@@ -48,6 +49,6 @@ public class AddAnonymousVoteParser implements CommandParser {
 
     public VotingCommand getCommand() throws SQLException {
 
-        return new AddAnonymousVote(new Vote(lawID, memberID, vote));
+        return new AddAnonymousVote(new Vote(lawID, memberID, vote, ""));
     }
 }

@@ -93,7 +93,12 @@ public class MemberStats implements VotingCommand {
         structure.addToLastRow(invalidated + "");
         structure.addRow("  *בוטלו על ידי היוצר-* ");
         structure.addToLastRow(canceled + "");
-        structure.addRow("");
+        structure.addRow("*אורך הבולבול:* ");
+        if(member.getLength() == 0) {
+            structure.addToLastRow("חבר המועצה מתבייש בגודל הבולבול הקטן לכאורה שלו ולכן לא סיפק מידע");
+        } else {
+            structure.addToLastRow(member.getLength() + " " + "סנטימטר");
+        }
         structure.addRow("*סטטיסטיקת הצבעות* (לא כולל אנונימיות)");
         structure.addRow("  *כמות הצבעות כוללת:* ");
         structure.addToLastRow(forVote + againstVote + neutralVote + "");

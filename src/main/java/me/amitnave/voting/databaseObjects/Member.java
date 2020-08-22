@@ -12,7 +12,18 @@ public class Member {
     private int id;
     private String phone;
     private String name;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     private boolean active;
+    private double length;
+
 
     public void setId(int id) {
         this.id = id;
@@ -127,7 +138,7 @@ public class Member {
             this.id = rs.getInt("id");
             phone = rs.getString("phone");
             this.name = rs.getString("name");
-
+            this.length = rs.getDouble("length");
         }
         st.close();
     }
@@ -135,20 +146,30 @@ public class Member {
     public static List<Member> getMembers() throws SQLException {
         Connection con= DBHelper.getConnection();
         Statement st = con.createStatement();
-        String sql = "SELECT * FROM member WHERE active = 1;";
+        String sql = "SELECT * FROM member;";
         ResultSet rs = st.executeQuery(sql);
         List<Member> members = new LinkedList<>();
         while (rs.next()) {
-            Member member = new Member(rs.getInt("id"), rs.getString("phone"), rs.getString("name"));
+            Member member = new Member(rs.getInt("id"), rs.getString("phone"), rs.getString("name"), rs.getDouble("length"), rs.getBoolean("active"));
             members.add(member);
         }
         st.close();
         return members;
     }
 
-    public Member(int id, String phone, String name) {
+    public Member(int id, String phone, String name, double length, boolean active) {
         this.id = id;
         this.phone = phone;
         this.name = name;
+        this.length = length;
+        this.active = active;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public void setLength(double length) {
+        this.length = length;
     }
 }

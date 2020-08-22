@@ -15,6 +15,7 @@ public class Vote {
     public static final int AGAINST = 1;
     public static final int NEUTRAL = 2;
     private int lawID;
+    private String info;
     private int memberID;
     private int vote;
 
@@ -40,21 +41,22 @@ public class Vote {
         ResultSet rs = st.executeQuery(query);
         List<Vote> votes = new LinkedList<>();
         while (rs.next()) {
-            votes.add(new Vote(rs.getInt("law"), rs.getInt("member"), rs.getInt("id")));
+            votes.add(new Vote(rs.getInt("law"), rs.getInt("member"), rs.getInt("id"), rs.getString("info")));
         }
         return votes;
     }
 
-    public Vote(int lawID, int memberID, int vote) {
+    public Vote(int lawID, int memberID, int vote, String info) {
         this.lawID = lawID;
         this.memberID = memberID;
         this.vote = vote;
+        this.info = info;
     }
 
     public void insert() throws SQLException {
-        String sql = "insert into voting.vote (law, member,vote) values (" + lawID + "," + memberID + "," + vote + ");";
+        String sql = "insert into voting.vote (law, member,vote, info) values (" + lawID + "," + memberID + "," + vote + ",'"+ info+ "');";
         if (Vote.AlreadyVoted(memberID, lawID)) {
-            sql = "UPDATE voting.vote SET vote = " + vote + " WHERE member = " + memberID + " AND law = " + lawID + ";";
+            sql = "UPDATE voting.vote SET vote = " + vote + ", info = '"+info+"' WHERE member = " + memberID + " AND law = " + lawID + ";";
             DBHelper.update(sql);
             return;
         }
@@ -102,5 +104,13 @@ public class Vote {
 
     public int getMemberID() {
         return memberID;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }
