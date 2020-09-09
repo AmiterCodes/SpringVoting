@@ -33,13 +33,22 @@ public class MemberStats implements VotingCommand {
     public List<MessageToSend> message() throws SQLException, ParseException {
         MessageStructure structure = new MessageStructure();
         structure.addToLastRow("*");
-        structure.addToLastRow("סטטיסטיקה עבור ");
-        structure.addToLastRow(member.getName());
+        if(member != null) {
+            structure.addToLastRow("סטטיסטיקה עבור ");
+            structure.addToLastRow(member.getName());
+        } else {
+            structure.addToLastRow("סטטיסטיקה כללית");
+        }
         structure.addToLastRow("*");
         Connection conn = DBHelper.getConnection();
         // our SQL SELECT query.
         // if you only need a few columns, specify them by name instead of using "*"
-        String query = "SELECT voting.law.status FROM voting.law WHERE voting.law.creator=" + member.getId() + " AND voting.law.anonymousCreator=FALSE;";
+        String query = "";
+        if(member != null) {
+            query = "SELECT voting.law.status FROM voting.law WHERE voting.law.creator=" + member.getId() + " AND voting.law.anonymousCreator=FALSE;";
+        } else {
+            query = "SELECT voting.law.status FROM voting.law";
+        }
         // create the java statement
         Statement st = conn.createStatement();
         // execute the query, and get a java resultset
@@ -61,7 +70,11 @@ public class MemberStats implements VotingCommand {
             if (rs.getInt("status") == Law.canceled)
                 canceled++;
         }
-        query = "SELECT voting.vote.vote FROM voting.vote INNER JOIN voting.law ON voting.vote.member=" + member.getId() + " AND voting.vote.law=voting.law.id AND voting.law.anonymousVoting=FALSE;";
+        if(member != null) {
+            query = "SELECT voting.vote.vote FROM voting.vote INNER JOIN voting.law ON voting.vote.member=" + member.getId() + " AND voting.vote.law=voting.law.id AND voting.law.anonymousVoting=FALSE;";
+        } else {
+            query = "SELECT voting.vote.vote FROM voting.vote INNER JOIN voting.law ON voting.vote.law = voting.law.id WHERE voting.law.anonymousVoting=FALSE;";
+        }
         // create the java statement
         st.close();
         conn=DBHelper.getConnection();
@@ -80,7 +93,11 @@ public class MemberStats implements VotingCommand {
                 neutralVote++;
         }
         st.close();
-        structure.addRow("*סטטיסטיקת חוקים* (לא כולל חוקים ממקור אנונימי)");
+        if(member == null) {
+            structure.addRow("*סטטיסטיקת חוקים*");
+        } else {
+            structure.addRow("*סטטיסטיקת חוקים* (לא כולל חוקים ממקור אנונימי)");
+        }
         structure.addRow("  *חוקים שהוצעו:* ");
         structure.addToLastRow(passed + failed + inProcess + invalidated + canceled + "");
         structure.addRow("  *עברו-* ");
@@ -93,11 +110,14 @@ public class MemberStats implements VotingCommand {
         structure.addToLastRow(invalidated + "");
         structure.addRow("  *בוטלו על ידי היוצר-* ");
         structure.addToLastRow(canceled + "");
-        structure.addRow("*אורך הבולבול:* ");
-        if(member.getLength() == 0) {
-            structure.addToLastRow("חבר המועצה מתבייש בגודל הבולבול הקטן לכאורה שלו ולכן לא סיפק מידע");
-        } else {
-            structure.addToLastRow(member.getLength() + " " + "סנטימטר");
+        if(member != null) {
+            structure.addRow("*אורך הבולבול:* ");
+
+            if (member.getLength() == 0) {
+                structure.addToLastRow("חבר המועצה מתבייש בגודל הבולבול הקטן לכאורה שלו ולכן לא סיפק מידע");
+            } else {
+                structure.addToLastRow(member.getLength() + " " + "סנטימטר");
+            }
         }
         structure.addRow("*סטטיסטיקת הצבעות* (לא כולל אנונימיות)");
         structure.addRow("  *כמות הצבעות כוללת:* ");

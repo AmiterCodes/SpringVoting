@@ -42,12 +42,17 @@ public class WhatsappVotingSystem {
             new ExposeCreatorParser(),
             new ListMembersParser(),
             new CommandParser() {
-
+                private String response;
                 private String chat;
                 @Override
                 public boolean isLegalCommand(Message message) throws SQLException, ParseException {
+
+                    chat = message.getChatID();
                     if(message.getContent().equals("#קמלמכר")) {
-                        chat = message.getChatID();
+                        response = "כן אני מטריד קטינות, איך ידעת?";
+                        return true;
+                    } else if(message.getContent().equals("#שירן") || message.getContent().equals("#אלכס")) {
+                        response = "כן ביצעתי פשעי מלחמה ב1 בספטמבר 2020, איך ידעת?";
                         return true;
                     }
                     return false;
@@ -63,7 +68,7 @@ public class WhatsappVotingSystem {
 
                         @Override
                         public List<MessageToSend> message() throws SQLException, ParseException {
-                            return List.of(new MessageToSend("כן אני מטריד קטינות, איך ידעת?", chat));
+                            return List.of(new MessageToSend(response, chat));
                         }
                     };
                 }

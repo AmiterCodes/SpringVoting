@@ -14,7 +14,7 @@ public class UnvotedLawsParser implements CommandParser {
 
     @Override
     public boolean isLegalCommand(Message message) throws SQLException, ParseException {
-        if (message.getContent().equals("#תזכורת") && message.isPrivate() && Member.isMember(message.getSender())) {
+        if (message.getContent().equals("#") && message.isPrivate() && Member.isMember(message.getSender())) {
             member = new Member(message.getSender());
             return true;
         }

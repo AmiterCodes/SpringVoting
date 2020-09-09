@@ -14,9 +14,15 @@ public class MemberStatsParser implements CommandParser {
     private String askerID;
     @Override
     public boolean isLegalCommand(Message message) throws SQLException, ParseException {
-        if (!message.getContent().startsWith("#סטטיסטיקה ")) return false;
         if (!message.isPrivate()) return false;
-        askerID=message.getChatID();
+        askerID = message.getSender();
+        if(message.getContent().equals("#סטטיסטיקה"))
+        {
+            member = null;
+            return true;
+        }
+        if (!message.getContent().startsWith("#סטטיסטיקה ")) return false;
+
         member= new Member(message.getContent().substring(message.getContent().indexOf(' ')+1), true);
         return member.getName()!=null;
     }

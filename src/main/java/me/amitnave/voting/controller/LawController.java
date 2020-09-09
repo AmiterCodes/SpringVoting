@@ -25,7 +25,7 @@ public class LawController {
     @GetMapping("/listlaws")
     @ResponseBody
     public List<Law> ListPendingLaws() throws SQLException, ParseException {
-        return Law.getLawsByStatus(Law.failed);
+        return Law.getLawsByStatus(Law.inProcess);
     }
     @ResponseBody
     @CrossOrigin
@@ -34,15 +34,21 @@ public class LawController {
         return new WhatsappVotingSystem().updateLaws();
     }
 
+    public static String blacklist = "972584319945@c.us 972587782724@c.us 972584404076@c.us";
+
     @ResponseBody
     @CrossOrigin
     @RequestMapping(value = "/message", method = POST)
     public List<MessageToSend> message(@RequestBody ObjectNode node) throws SQLException, ParseException {
+
+        String sender=  node.get("sender").asText();
+        if(blacklist.contains(sender)) {
+            return null;
+        }
         String content=  node.get("content").asText();
         String chatId=  node.get("chatId").asText();
         String repliedMessage=  node.get("repliedMessage").asText();
         boolean repliedToBot=  node.get("repliedToBot").asBoolean();
-        String sender=  node.get("sender").asText();
         Message m = new Message(content,chatId,repliedMessage,repliedToBot,sender);
         VotingCommand c = new WhatsappVotingSystem().parseMessage(m);
         if(c == null) return null;
