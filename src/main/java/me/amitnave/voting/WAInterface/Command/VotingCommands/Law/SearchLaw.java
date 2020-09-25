@@ -24,14 +24,25 @@ public class SearchLaw implements VotingCommand {
 
     @Override
     public List<MessageToSend> message() throws SQLException, ParseException {
+
+        List<Law> inProcess = Law.getLawsByStatusLike(Law.inProcess, searchTerm);
         List<Law> passed = Law.getLawsByStatusLike(Law.passed, searchTerm);
         List<Law> failed = Law.getLawsByStatusLike(Law.failed, searchTerm);
-        if (passed.size() + failed.size() == 0) return List.of(new MessageToSend("לא נמצאו חוקים שמתאימים לחיפוש", askerNum));
+        if (passed.size() + failed.size() + inProcess.size() == 0) return List.of(new MessageToSend("לא נמצאו חוקים שמתאימים לחיפוש", askerNum));
         MessageStructure structure = new MessageStructure();
-        structure.addRow("*" + "חוקים שמתאימים לחיפוש שעברו" + "*");
-        lawList(passed, structure);
-        structure.addRow("*" + "חוקים שמתאימים לחיפוש שלא עברו" + "*");
-        lawList(failed, structure);
+
+        if(inProcess.size() != 0) {
+            structure.addRow("*" + "חוקים שמתאימים לחיפוש שבהצבעה" + "*");
+            lawList(inProcess, structure);
+        }
+        if(passed.size() != 0) {
+            structure.addRow("*" + "חוקים שמתאימים לחיפוש שעברו" + "*");
+            lawList(passed, structure);
+        }
+        if(failed.size() != 0) {
+            structure.addRow("*" + "חוקים שמתאימים לחיפוש שלא עברו" + "*");
+            lawList(failed, structure);
+        }
         return List.of(new MessageToSend(structure.getString(), askerNum));
     }
 

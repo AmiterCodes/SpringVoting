@@ -13,6 +13,7 @@ public class Member {
     private String phone;
     private String name;
 
+
     public boolean isActive() {
         return active;
     }
@@ -23,7 +24,7 @@ public class Member {
 
     private boolean active;
     private double length;
-
+    private int cuties;
 
     public void setId(int id) {
         this.id = id;
@@ -119,6 +120,7 @@ public class Member {
             this.phone = rs.getString("phone");
             active = rs.getBoolean("active");
             name = rs.getString("name");
+            cuties = rs.getInt("cuties");
         }
         st.close();
     }
@@ -139,6 +141,7 @@ public class Member {
             phone = rs.getString("phone");
             this.name = rs.getString("name");
             this.length = rs.getDouble("length");
+            cuties = rs.getInt("cuties");
         }
         st.close();
     }
@@ -150,19 +153,20 @@ public class Member {
         ResultSet rs = st.executeQuery(sql);
         List<Member> members = new LinkedList<>();
         while (rs.next()) {
-            Member member = new Member(rs.getInt("id"), rs.getString("phone"), rs.getString("name"), rs.getDouble("length"), rs.getBoolean("active"));
+            Member member = new Member(rs.getInt("id"), rs.getString("phone"), rs.getString("name"), rs.getDouble("length"), rs.getBoolean("active"), rs.getInt("cuties"));
             members.add(member);
         }
         st.close();
         return members;
     }
 
-    public Member(int id, String phone, String name, double length, boolean active) {
+    public Member(int id, String phone, String name, double length, boolean active, int cuties) {
         this.id = id;
         this.phone = phone;
         this.name = name;
         this.length = length;
         this.active = active;
+        this.cuties = cuties;
     }
 
     public double getLength() {
@@ -171,5 +175,13 @@ public class Member {
 
     public void setLength(double length) {
         this.length = length;
+    }
+
+    public int getCuties() {
+        return cuties;
+    }
+
+    public void setCuties(int cuties) {
+        this.cuties = cuties;
     }
 }

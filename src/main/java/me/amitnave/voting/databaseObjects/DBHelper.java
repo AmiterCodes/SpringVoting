@@ -29,11 +29,12 @@ public class DBHelper {
 
     }
 
-    public static void update(String sql) throws SQLException {
+    public static int update(String sql) throws SQLException {
         Connection conn = getConnection();
         StatementImpl statement = (StatementImpl) conn.createStatement();
-        statement.execute(sql);
+        int output = statement.executeUpdate(sql);
         conn.close();
+        return output;
     }
 
     public static Connection getConnection() throws SQLException {

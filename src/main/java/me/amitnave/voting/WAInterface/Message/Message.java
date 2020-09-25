@@ -11,7 +11,7 @@ public class Message extends MessageToSend {
     }
 
     public boolean isPrivate() {
-        return sender.equals(chatID);
+        return chatID.matches("\\d{12}@c\\.us");
     }
 
     public boolean isRepliedToBot() {

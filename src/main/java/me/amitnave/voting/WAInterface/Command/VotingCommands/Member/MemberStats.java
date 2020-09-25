@@ -118,6 +118,9 @@ public class MemberStats implements VotingCommand {
             } else {
                 structure.addToLastRow(member.getLength() + " " + "סנטימטר");
             }
+
+            structure.addRow("*אחוז ההתאמה לסרט 'חמודות':* ");
+            structure.addToLastRow(member.getCuties() + "%");
         }
         structure.addRow("*סטטיסטיקת הצבעות* (לא כולל אנונימיות)");
         structure.addRow("  *כמות הצבעות כוללת:* ");

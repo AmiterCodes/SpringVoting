@@ -24,6 +24,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
     compileOnly 'org.projectlombok:lombok'
+
+    compile group: 'com.massisframework', name: 'j-text-utils', version: '0.3.4'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.20'
     annotationProcessor 'org.projectlombok:lombok'

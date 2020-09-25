@@ -48,10 +48,10 @@ public class AddVoteParser implements CommandParser {
     }
 
     public static int ConvertStatus(String s) {
-        if (s.startsWith("בעד") || s.startsWith("לרוויה")) {
+        if (s.startsWith("בעד") || s.startsWith("לרוויה") || s.startsWith("קול") || s.startsWith("++")) {
             return Vote.FOR;
         }
-        if (s.startsWith("נגד") || s.startsWith("לא קול")) {
+        if (s.startsWith("נגד") || s.startsWith("לא קול") || s.startsWith("--")) {
             return Vote.AGAINST;
         }
         if (s.startsWith("נמנע") || s.startsWith("זה לא חוק חשוב")) {
@@ -64,6 +64,11 @@ public class AddVoteParser implements CommandParser {
 
     public static String removeStatus(String s) {
 
+        if(s.startsWith("++") || s.startsWith("--")) {
+            if(s.length() > 2) {
+                return s.substring(2);
+            }
+        }
         if (s.startsWith("בעד") || s.startsWith("נגד")) {
             if(s.length() > 3)
                 return s.substring(3);
@@ -72,7 +77,7 @@ public class AddVoteParser implements CommandParser {
             if(s.length() > 4)
                 return s.substring(4);
         }
-        if (s.startsWith("לרוויה") || s.startsWith("לא קול") || s.startsWith("זה לא חוק חשוב")) {
+        if (s.startsWith("לרוויה") || s.startsWith("לא קול") || s.startsWith("זה לא חוק חשוב") || s.startsWith("קול")) {
             return s;
         }
         return "";

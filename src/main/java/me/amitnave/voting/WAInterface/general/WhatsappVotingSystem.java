@@ -3,6 +3,8 @@ package me.amitnave.voting.WAInterface.general;
 import me.amitnave.voting.WAInterface.Command.CommandParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.AddVoteParser.AddAnonymousVoteParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.AddVoteParser.AddVoteParser;
+import me.amitnave.voting.WAInterface.Command.Parsers.AdminSelectParser;
+import me.amitnave.voting.WAInterface.Command.Parsers.AdminUpdateParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.AppealParser.AddAppealParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.AppealParser.AnswerAppealParser;
 import me.amitnave.voting.WAInterface.Command.Parsers.HelpParser;
@@ -25,6 +27,8 @@ import java.util.List;
 public class WhatsappVotingSystem {
     private Reminder reminder = new Reminder();
     private List<CommandParser> parsers = List.of(
+            new AdminUpdateParser(),
+            new AdminSelectParser(),
             new GetMemberLawsParser(),
             new AddAnonymousVoteParser(),
             new AddVoteParser(),
